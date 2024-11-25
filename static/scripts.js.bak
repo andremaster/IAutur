@@ -1,0 +1,264 @@
+
+
+const chatbox = document.getElementById('chatbox');
+const form = document.getElementById('chat-form');
+const questionInput = document.getElementById('question-input');
+const buttonEnviar = document.getElementById('btn-enviar');
+
+document.addEventListener('DOMContentLoaded', messageInitial());
+
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const question = questionInput.value.trim();
+
+  if (question === '') {
+    alert('Por favor, digite uma pergunta.');
+    return;
+  }
+
+  // Desabilita o campo de entrada
+  questionInput.disabled = true;
+  buttonEnviar.disabled = true;
+  buttonEnviar.style.backgroundColor='grey';
+
+  // Exibe a pergunta no chatbox
+  const userMessageBubble = document.createElement('div');
+
+  const userName = document.createElement('span');
+  userName.classList.add('user-name');
+  userName.innerText = 'Você';
+  chatbox.appendChild(userName);
+
+  userMessageBubble.classList.add('message-bubble-right');
+  userMessageBubble.classList.add('outgoing');
+  const userMessage = document.createElement('span');
+  userMessage.innerText = question;
+  userMessageBubble.appendChild(userMessage);
+  chatbox.appendChild(userMessageBubble);
+
+        // Rola o chatbox para exibir a última mensagem
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+  //Status digitando...
+  var status = document.getElementById('status');
+  var spanText = document.getElementById('textDigitando');
+  status.style.display = 'flex';
+  spanText.innerHTML = '...';
+  chatbox.appendChild(status);
+  chatbox.scrollTop = chatbox.scrollHeight;
+
+  // Envia a pergunta para o servidor
+  fetch('/chat', {
+      method: 'POST',
+      body: new URLSearchParams({
+          question: question
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      const answer = data.answer;
+      console.log(answer)
+      status.style.display = 'none';
+
+      const botName = document.createElement('span');
+      botName.classList.add('bot-name');
+      botName.innerText = 'Bot Autur';
+      chatbox.appendChild(botName);
+
+/*
+      const botImage = document.createElement('div');
+
+      const botImageElement = document.createElement('img');
+      botImageElement.classList.add('outgoing-bot-image');
+      botImageElement.src = 'static/avatarBot.jpg';
+      botImageElement.alt = 'avatarRobo';
+      botImage.appendChild(botImageElement);*/
+
+
+      // Exibe a resposta no chatbox
+      const botMessageBubble = document.createElement('div');
+      botMessageBubble.classList.add('message-bubble-left');
+      botMessageBubble.classList.add('outgoing-bot');
+
+      //botMessageBubble.appendChild(botImage);
+
+      const botMessage = document.createElement('span');
+      botMessage.classList.add('text-bubble-left');
+      botMessage.innerHTML = answer;
+      botMessageBubble.appendChild(botMessage);
+
+      chatbox.appendChild(botMessageBubble);
+
+      // Limpa o campo de entrada
+      questionInput.value = '';
+
+      // Rola o chatbox para exibir a última mensagem
+      chatbox.scrollTop = chatbox.scrollHeight;
+
+      // Habilita o campo de entrada novamente
+      questionInput.disabled = false;
+      buttonEnviar.disabled = false;
+      buttonEnviar.style.backgroundColor='';
+    })
+    .catch(error => {
+      console.error('Erro:', error);
+      // Em caso de erro, habilita o campo de entrada novamente
+      questionInput.disabled = false;
+    });
+});
+
+const items = document.querySelectorAll('.accordion button');
+
+function toggleAccordion() {
+  const itemToggle = this.getAttribute('aria-expanded');
+
+  for (i = 0; i < items.length; i++) {
+    items[i].setAttribute('aria-expanded', 'false');
+  }
+
+  if (itemToggle == 'false') {
+    this.setAttribute('aria-expanded', 'true');
+  }
+}
+
+items.forEach(item => item.addEventListener('click', toggleAccordion));
+
+$('.btn').on('click', function() {
+  var $this = $(this);
+  $this.button('loading');
+  setTimeout(function() {
+    $this.button('reset');
+  }, 1000);
+});
+
+function messageInitial(){
+    
+//alert('Bem vindo ao Autur - FAQ Inteligente, este é um portal para solução de dúvidas e entendimento de processos. Utilize com cautela, sua utilização está sendo capturadas e registradas para melhor tratamento das soluções. Ao clicar em "OK" você concorda com a utilização da ferramenta e utilização dos dados.');
+
+    $(function() {
+      var staticBackdrop = document.getElementById('staticBackdrop');
+      var myModal = new bootstrap.Modal(staticBackdrop);
+      myModal.show();
+    });
+
+    const botName = document.createElement('span');
+    botName.classList.add('bot-name');
+    botName.innerText = 'Bot Autur';
+    chatbox.appendChild(botName);
+
+
+/*    const botImage = document.createElement('div');
+
+    const botImageElement = document.createElement('img');
+    botImageElement.classList.add('outgoing-bot-image');
+    botImageElement.src = 'static/avatarBot.jpg';
+    botImageElement.alt = 'avatarRobo';
+    botImage.appendChild(botImageElement);*/
+
+
+    // Exibe a resposta no chatbox
+    const botMessageBubble = document.createElement('div');
+    botMessageBubble.classList.add('message-bubble-left');
+    botMessageBubble.classList.add('outgoing-bot');
+
+    //botMessageBubble.appendChild(botImage);
+
+    const botMessage = document.createElement('span');
+    botMessage.classList.add('text-bubble-left');
+    botMessage.innerText = "Olá, sou o Bot Autur, como posso lhe ajudar?";
+    botMessageBubble.appendChild(botMessage);
+
+    chatbox.appendChild(botMessageBubble);
+}
+
+const campoExpansivel = document.getElementById('chatbox');
+
+campoExpansivel.addEventListener('input', function() {
+  this.style.height = 'auto';
+  this.style.height = `${Math.min(this.scrollHeight, 250)}px`;
+});
+
+
+
+/* Autocomplete */
+function searchFunction() {
+  var input, filter, ul, li, s, p, i, txtValue;
+  input = document.getElementById('myInput');
+  filter = input.value.toUpperCase();
+  ul = document.getElementById("myUL");
+  li = ul.getElementsByClassName('accordion-item');
+
+  // Percorre todos os itens da lista e oculte aqueles que não correspondem à consulta de pesquisa
+  for (i = 0; i < li.length; i++) {
+    p = li[i].getElementsByClassName("accordion-header")[0];
+    s = li[i].getElementsByClassName("accordion-body")[0];
+    txtValue = (s.innerText) + " " + (p.innerText).toUpperCase(); ;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      li[i].style.display = "";
+    } else {
+      li[i].style.display = "none";
+    }
+  }
+}
+// Filtrando Todos
+filterSelection("todos")
+function filterSelection(c) {
+  var x, i;
+  x = document.getElementsByClassName("filterDiv");
+  if (c == "todos") c = "";
+  // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+  for (i = 0; i < x.length; i++) {
+    faqRemoveClass(x[i], "show");
+    if (x[i].className.indexOf(c) > -1) faqAddClass(x[i], "show");
+  }
+}
+
+// Filtrando Todos
+filterSelection("recentes")
+function filterSelection(r) {
+  var y, i;
+  y = document.getElementsByClassName("filterDiv");
+  if (r == "todos") r = "";
+  // Add the "show" class (display:block) to the filtered elements, and remove the "show" class from the elements that are not selected
+  for (i = 0; i < y.length; i++) {
+    faqRemoveClass(y[i], "show");
+    if (y[i].className.indexOf(r) > -1) faqAddClass(y[i], "show");
+  }
+}
+
+
+// Apresenta somente os elementos solicitados
+function faqAddClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    if (arr1.indexOf(arr2[i]) == -1) {
+      element.className += " " + arr2[i];
+    }
+  }
+}
+
+// Esconde os elementos indesejados
+function faqRemoveClass(element, name) {
+  var i, arr1, arr2;
+  arr1 = element.className.split(" ");
+  arr2 = name.split(" ");
+  for (i = 0; i < arr2.length; i++) {
+    while (arr1.indexOf(arr2[i]) > -1) {
+      arr1.splice(arr1.indexOf(arr2[i]), 1); 
+    }
+  }
+  element.className = arr1.join(" ");
+}
+
+// Add active class to the current control button (highlight it)
+var btnContainer = document.getElementById("myBtnContainer");
+var btns = btnContainer.getElementsByClassName("btn-departamentos");
+for (var i = 0; i < btns.length; i++) {
+  btns[i].addEventListener("click", function() {
+    var current = document.getElementsByClassName("active");
+    current[0].className = current[0].className.replace(" active", "");
+    this.className += " active";
+  });
+}
