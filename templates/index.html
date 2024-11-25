@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Chatbot IAutur</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="static/favicon.ico">
+
+  <!-- Fonts Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+  <!--BootStrap core CSS-->
+  <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.3/components/faqs/faq-2/assets/css/faq-2.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Termo de utilização</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <b>Bem vindo a Autur - Chat Inteligente !</b>
+        <br>
+        Este é um portal para solução de dúvidas e entendimento de processos. Utilize com cautela, sua utilização está
+        sendo registrada para melhor tratamento das soluções e geração de documentações.
+        <br><br>
+        Ao clicar em <b>"OK"</b> você concorda com os termos de utilização da ferramenta e utilização dos dados.
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<body>
+  <!-- Page Content -->
+  <!-- header card-->
+  <div class="card-response">
+    <div class="card-header">
+      <header>
+        <a href="#"><img class="header-banner" src="static/HeaderBanner.png" alt="Banner Superior"></a>
+      </header>
+    </div>
+  </div>
+
+  <!-- Card Container-->
+  <div class="card-response">
+    <div class="card">
+      <div id="myBtnContainer">
+        <div class="container">
+          <div class="filter-search row justify-content-center">
+            <input type="text" class="pesquisa-faq" id="pesquisa-faq" placeholder="Buscar..." onkeyup="searchFunction()"
+              onclick="limparSelecao()">
+          </div>
+        </div>
+
+      </div>
+      <!-- FAQ 2 - Bootstrap Brain Component -->
+      <ul id="myUL">
+        <div id="myBtnContainerGR">
+          <div>
+            <button class="btn-departamentos btn-gerais active" onclick="filterSelection('recentes')">Perguntas Recentes</button>
+            <button class="btn-departamentos btn-gerais" onclick="filterSelection('todos')">Todas Perguntas</button>
+          </div>
+        </div>
+        <section id="faq" class="bsb-faq-2 bg-light py-3 py-md-5 py-xl-8">
+          <!--<h3>Departamentos</h3>-->
+          <div id="myBtnContainerDPT">
+            <div>
+              <!-- Matriz -->
+              <button class="btn-departamentos" onclick="filterSelection('Rotas')">Rotas</button>
+              <button class="btn-departamentos" onclick="filterSelection('Aeroportos')">Aeroportos</button>
+              <button class="btn-departamentos" onclick="filterSelection('Vendas')">Vendas</button>
+              <button class="btn-departamentos" onclick="filterSelection('Acessos')">Acessos</button>
+              <button class="btn-departamentos" onclick="filterSelection('Requisicoes')">Requisicoes</button>
+              <button class="btn-departamentos" onclick="filterSelection('Tokens')">Tokens</button>
+             </div>
+          </div>
+          <div class="card-body">
+            <div class="row gy-5 gy-lg-0">
+              <div class="col-12 col-lg-12">
+                <div class="row justify-content-xl-center">
+                  <div class="col-12 col-xl-10">
+                    <div class="accordion accordion-flush" id="accordionExample">
+                      <!--Cria Cards de perguntas e respostas-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <footer>
+          <div class="container ">
+            <div class="footer-content row">
+              <div class="faq-section col-12 col-md-8">
+                <h3>Acessos Rápidos</h3>
+                <ul class="faq-list">
+                  <li><a href="http://www.autur.com.br" target="_blank">autur.com.br</a></li>
+                  <li><a href="https://lookerstudio.google.com/reporting/edba2a12-544f-468b-89a0-d02c388536fe" target="_blank">Rotas</a></li>
+                  </ul>
+              </div>
+
+
+              <div class="col-6 col-md-4">
+                <img src="/static/logo.png" class="logo-footer-digital">
+              </div>
+
+
+            </div>
+            <div class="row col-lg-12">
+              <p class="direitos-footer-text">2024 © Autur - Todos os direitos reservados.</p>
+            </div>
+          </div>
+        </footer>
+
+    </div>
+  </div>
+  <!-- Chat -->
+  <div id="wrapper-chat-invisible">
+  <input type="checkbox" id="check">
+  <label class="chat-btn" for="check">
+    <i class="fa fa-commenting-o comment"></i>
+    <i class="fa fa-close close"></i>
+  </label>
+    <!--Inserir chat via JS-->
+
+  </div>
+
+<!-- Bootstrap core JavaScript -->
+<script src="https://unpkg.com/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+  integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+  integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+  integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
